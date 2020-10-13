@@ -9,7 +9,7 @@ fuente = pygame.font.SysFont("Arial", 35)
 fuente2 = pygame.font.SysFont("Arial", 25)
 
 screen = pygame.display.set_mode((940, 380))
-pygame.display.set_caption("Juego de Plataformas")
+pygame.display.set_caption("JUEGO SUPER EPICO DE SALTOS!!!1!!1!11!1!")
 
 clock = pygame.time.Clock()
 
