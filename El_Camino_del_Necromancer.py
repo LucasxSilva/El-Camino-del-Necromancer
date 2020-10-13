@@ -5,8 +5,8 @@ from archivo_niveles import *
 from pygame import mixer
 
 pygame.init()
-fuente = pygame.font.SysFont("Arial", 35)
-fuente2 = pygame.font.SysFont("Arial", 25)
+fuente = pygame.font.SysFont("Arial", 45)
+fuente2 = pygame.font.SysFont("Arial", 30)
 
 screen = pygame.display.set_mode((940, 380))
 pygame.display.set_caption("JUEGO SUPER EPICO DE SALTOS!!!1!!1!11!1!")
