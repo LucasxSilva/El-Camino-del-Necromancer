@@ -13,12 +13,14 @@ pygame.display.set_caption("Juego de Plataformas")
 
 clock = pygame.time.Clock()
 
-modo=""
+modo="admin"
 #admin
+habilidad_desbloqueada=False
+habilidad_mejorada=pygame.transform.scale(pygame.image.load("imagenes/jugador/ataqued.png"),(100,100))
+
 
 mixer.music.load("sonidos/Battle-of-the-Ancients.wav")
 mixer.music.play(-1)
-
 class Botones:
 	def __init__(self, color, width, height, posx, posy):
 		self.color = color
@@ -66,15 +68,16 @@ class propiedades:
 	def hechizo(self,seleccionado):
 		global daño_recibido
 
-		if seleccionado==1: 
+		if seleccionado==1 and habilidad_desbloqueada==False:
 			#activa
-			if tecla[pygame.K_SPACE] and self.hechizo_lanzado==False:
+			if tecla[pygame.K_SPACE] and self.hechizo_lanzado==False :
 				hechizo_sonido = mixer.Sound("sonidos/Fireball.wav")
 				hechizo_sonido.play()
 				self.hitbox_hechizo.x=self.posx
 				self.hitbox_hechizo.y=self.posy
 				self.hechizo_lanzado=True
 				self.direccion_hechizo=self.direccion
+	
 
 			#mantiene
 			if self.hechizo_lanzado==True:
@@ -85,7 +88,7 @@ class propiedades:
 
 				elif self.direccion_hechizo=="izquierda":
 					self.hitbox_hechizo.x-=7
-					screen.blit(pygame.image.load("imagenes/jugador/ataquei.png"),(self.hitbox_hechizo.x,self.hitbox_hechizo.y))
+					screen.blit(pygame.image.load("imagenes/jugador/ataqued.png"),(self.hitbox_hechizo.x,self.hitbox_hechizo.y))
 
 				self.tiempo_hechizo+=1
 				if self.tiempo_hechizo>=20:
@@ -93,6 +96,7 @@ class propiedades:
 					self.tiempo_hechizo=0
 					self.hitbox_hechizo.x=0
 					self.hitbox_hechizo.y=0
+					
 
 				for muro in muros_marrones:
 					if self.hitbox_hechizo.colliderect(muro.rect)==True:
@@ -119,6 +123,42 @@ class propiedades:
 						self.hitbox_hechizo.x=0
 						self.hitbox_hechizo.y=0
 
+		elif seleccionado==1 and habilidad_desbloqueada==True:
+#activa
+			if tecla[pygame.K_SPACE] and self.hechizo_lanzado==False :
+				hechizo_sonido = mixer.Sound("sonidos/Fireball.wav")
+				hechizo_sonido.play()
+				self.hitbox_hechizo.x=self.posx+30
+				self.hitbox_hechizo.y=self.posy-10
+				self.hechizo_lanzado=True
+				self.direccion_hechizo=self.direccion
+				self.hitbox_hechizo.width=30
+				self.hitbox_hechizo.height=55
+	
+
+			#mantiene
+			if self.hechizo_lanzado==True:
+				#pygame.draw.rect(screen, (255,0,0), (self.hitbox_hechizo.x,self.hitbox_hechizo.y,self.hitbox_hechizo.width,self.hitbox_hechizo.height))
+				if self.direccion_hechizo=="derecha" or self.direccion_hechizo=="":
+					self.hitbox_hechizo.x+=8
+					screen.blit(habilidad_mejorada,(self.hitbox_hechizo.x-55,self.hitbox_hechizo.y-25))
+					#pygame.draw.rect(screen,(255,0,0),pygame.Rect(self.hitbox_hechizo.x, self.hitbox_hechizo.y, self.hitbox_hechizo.width, self.hitbox_hechizo.height))
+
+				elif self.direccion_hechizo=="izquierda":
+					self.hitbox_hechizo.x-=8
+					screen.blit(habilidad_mejorada,(self.hitbox_hechizo.x-25,self.hitbox_hechizo.y-20))
+					#pygame.draw.rect(screen,(255,0,0),pygame.Rect(self.hitbox_hechizo.x, self.hitbox_hechizo.y, self.hitbox_hechizo.width, self.hitbox_hechizo.height))
+
+				self.tiempo_hechizo+=1
+				if self.tiempo_hechizo>=60:
+					self.hechizo_lanzado=False
+					self.tiempo_hechizo=0
+					self.hitbox_hechizo.x=0
+					self.hitbox_hechizo.y=0
+
+      
+      
+      
 		elif seleccionado==2:
 			for x in self.dragon_hechizo:
 				#pygame.draw.rect(screen, (255,0,0), (x.hitbox_hechizo.x,x.hitbox_hechizo.y,x.hitbox_hechizo.width,x.hitbox_hechizo.height))
@@ -143,32 +183,66 @@ class propiedades:
 
 
 				for muro in muros_marrones:
-					if x.hitbox_hechizo.colliderect(muro.rect)==True:
+					if x.hitbox_hechizo.colliderect(muro.rect)==True and x in self.dragon_hechizo:
 						self.dragon_hechizo.remove(x)
 
 				for muro in muros_negros:
-					if x.hitbox_hechizo.colliderect(muro.rect)==True:
+					if x.hitbox_hechizo.colliderect(muro.rect)==True and x in self.dragon_hechizo:
 						self.dragon_hechizo.remove(x)
 
 				for muro in muros_verdes:
-					if x.hitbox_hechizo.colliderect(muro.rect)==True:
+					if x.hitbox_hechizo.colliderect(muro.rect)==True and x in self.dragon_hechizo:
 						self.dragon_hechizo.remove(x)
 
 				for muro in piedras:
-					if x.hitbox_hechizo.colliderect(muro.rect)==True:
+					if x.hitbox_hechizo.colliderect(muro.rect)==True and x in self.dragon_hechizo:
 						self.dragon_hechizo.remove(x)
 
-				if x.hitbox_hechizo.colliderect(heroe_jugador.hitbox_hechizo)==True:
+				if x.hitbox_hechizo.colliderect(heroe_jugador.hitbox_hechizo)==True and x in self.dragon_hechizo:
 						self.dragon_hechizo.remove(x)
 
-				if x.hitbox_hechizo.colliderect(heroe_jugador.hitbox)==True:
+				if x.hitbox_hechizo.colliderect(heroe_jugador.hitbox)==True and x in self.dragon_hechizo:
+					daño_recibido=True
+     
+		#ataque jefe
+		elif seleccionado==3:
+			for x in self.dragon_hechizo:
+				#pygame.draw.rect(screen, (255,0,0), (x.hitbox_hechizo.x,x.hitbox_hechizo.y,x.hitbox_hechizo.width,x.hitbox_hechizo.height))
+
+				if x.vida==1:
+					x.hitbox_hechizo.y=x.hitbox_hechizo.y+30
+					x.hitbox_hechizo.width=x.hitbox_hechizo.width+80
+					x.hitbox_hechizo.height=x.hitbox_hechizo.height+50
+					x.hechizo_lanzado=True
+					x.vida=0
+				if self.direccion=="derecha":
+					x.direccion_hechizo="derecha"
+				else:
+					x.direccion_hechizo="izquierda"
+
+				if x.direccion_hechizo=="derecha" and x.hechizo_lanzado==True:
+					x.hitbox_hechizo.x+=12
+					screen.blit(pygame.transform.scale(pygame.image.load("imagenes/dragon/Fire_Attack1d.png"), (240,240)),(x.hitbox_hechizo.x,x.hitbox_hechizo.y))
+
+
+				elif x.direccion_hechizo=="izquierda" and x.hechizo_lanzado==True:
+					x.hitbox_hechizo.x-=12
+					screen.blit(pygame.transform.scale(pygame.image.load("imagenes/dragon/Fire_Attack1i.png"), (240,240)),(x.hitbox_hechizo.x-15,x.hitbox_hechizo.y-80))
+					#pygame.draw.rect(screen,(255,0,0),pygame.Rect(x.hitbox_hechizo.x, x.hitbox_hechizo.y, x.hitbox_hechizo.width, x.hitbox_hechizo.height))
+
+
+
+				if x.hitbox_hechizo.colliderect(heroe_jugador.hitbox_hechizo)==True and x in self.dragon_hechizo and habilidad_desbloqueada==True:
+						self.dragon_hechizo.remove(x)
+
+				if x.hitbox_hechizo.colliderect(heroe_jugador.hitbox)==True and x in self.dragon_hechizo:
 					daño_recibido=True
 
 
 
 
 	def animar(self):
-		global tecla,daño_recibido
+		global tecla,daño_recibido,habilidad_desbloqueada
 		self.tiempo_pasado+=1
 
 		screen.blit(self.imagen[self.num_animacion],(self.posx,self.posy))
@@ -262,6 +336,7 @@ class propiedades:
 		self.tiempo_pasado+=1
 		if self.vida>0 or self.vida<=0 and self.num_animacion>=8 and self.num_animacion<12 or self.vida<=0 and self.num_animacion>=23 and self.num_animacion<28:
 			screen.blit(dragon_imagenes[self.num_animacion],(self.hitbox.x,self.hitbox.y))
+   
 			if self.vida<=0:
 				dragon_sonido = mixer.Sound("sonidos/dragon_muerte.wav")
 				dragon_sonido.play()
@@ -320,12 +395,88 @@ class propiedades:
 				else:
 					self.num_animacion==23
 		
+  
+	def animar_dragon_jefe(self):
+		self.tiempo_pasado+=1
+		if self.vida>0 or self.vida<=0 and self.num_animacion>=8 and self.num_animacion<12 or self.vida<=0 and self.num_animacion>=23 and self.num_animacion<28:
+			
+			#imagen=dragon_imagenes[self.num_animacion]
+			#imagen_agrandada= pygame.transform.scale(imagen, (100,100))
+			#screen.blit(imagen_agrandada, (self.hitbox.x,self.hitbox.y))
+
+			screen.blit(pygame.transform.scale(dragon_imagenes[self.num_animacion], (200,200)),(self.hitbox.x-40,self.hitbox.y-30))
+			#pygame.draw.rect(screen,(255,0,0),pygame.Rect(self.posx, self.posy, self.width, self.height))
+
+
+			if self.vida<=0:
+				dragon_sonido = mixer.Sound("sonidos/dragon_muerte.wav")
+				dragon_sonido.play()
+		if self.vida<=0:
+			blit_texto(screen, "Finalmente, has Ganado!", (275, 205),(640,300), fuente)
+
+
+		if self.direccion=="derecha":
+			if self.vida>=0:
+				if self.num_animacion<6:
+					if self.tiempo_pasado>=8:
+						self.num_animacion=self.num_animacion+1
+						self.tiempo_pasado=0
+						#if self.siendo_atacado==True:
+							#screen.blit(dragon_imagenes[7],(self.hitbox.x,self.hitbox.y))
+							#self.siendo_atacado=False
+
+						if self.num_animacion>=6:
+							self.dragon_hechizo.append(propiedades(self.posx+45,self.posy+15,self.width,self.height,1))
+							self.direccion_hechizo=self.direccion
+				else:
+					self.num_animacion=0
+
+			else:
+				if self.num_animacion<8:
+					self.num_animacion=8
+				if self.num_animacion>=8 and self.num_animacion<12:
+					if self.tiempo_pasado>=4:
+						self.num_animacion=self.num_animacion+1
+						self.tiempo_pasado=0
+				else:
+					self.num_animacion==8
+
+
+		elif self.direccion=="izquierda":
+			if self.vida>=0:
+				if self.num_animacion>=16 and self.num_animacion<21:
+					if self.tiempo_pasado>=8:
+						self.num_animacion=self.num_animacion+1
+						self.tiempo_pasado=0
+						#if self.siendo_atacado==True:
+							#screen.blit(dragon_imagenes[7],(self.hitbox.x,self.hitbox.y))
+							#self.siendo_atacado=False
+
+						if self.num_animacion>=21:
+							self.dragon_hechizo.append(propiedades(self.posx+25,self.posy+15,self.width,self.height,1))
+							self.direccion_hechizo=self.direccion
+				else:
+					self.num_animacion=16
+
+			else:
+				if self.num_animacion<23:
+					self.num_animacion=23
+				if self.num_animacion>=23 and self.num_animacion<28:
+					if self.tiempo_pasado>=4:
+						self.num_animacion=self.num_animacion+1
+						self.tiempo_pasado=0
+				else:
+					self.num_animacion==23
+  
+  
 	def enemigo_daño(self):
 		if heroe_jugador.hechizo_lanzado==True:
-			if self.hitbox.colliderect(heroe_jugador.hitbox_hechizo) == True:
+			if self.hitbox.colliderect(heroe_jugador.hitbox_hechizo) == True and habilidad_desbloqueada==False:
 				self.vida -= 1
 				self.siendo_atacado=True
-
+			elif self.hitbox.colliderect(heroe_jugador.hitbox_hechizo) == True and habilidad_desbloqueada==True:
+				self.vida -= 10
+				self.siendo_atacado=True
 
 	def patrullar_lizard(self,xi,xf):
 		global daño_recibido
@@ -386,8 +537,8 @@ class propiedades:
 
 		if self.hitbox.colliderect(heroe_jugador.hitbox)==True:
 			daño_recibido=True
-
 			self.animar_calavera()
+
 	def posiciones(self):
 		global nivel
 		if nivel==1:
@@ -415,6 +566,7 @@ class propiedades:
 			dragon[1].hitbox.x=570
 			dragon[1].hitbox.y=360
 			dragon[1].direccion="izquierda"
+
 			calaveras[0].hitbox.x=random.randint(385,820)
 			calaveras[0].hitbox.y=245
 			calaveras[1].hitbox.x=random.randint(290,815)
@@ -424,7 +576,31 @@ class propiedades:
 			for x in dragon:
 				x.vida=20
 		if nivel==3:
-			pass
+			lizard[0].hitbox.x=random.randint(680,810)
+			lizard[0].hitbox.y=185
+			lizard[1].hitbox.x=random.randint(810,895)
+			lizard[1].hitbox.y=175
+			for x in lizard:
+				x.vida=1
+
+			dragon[0].hitbox.x=670
+			dragon[0].posx=670
+			dragon[0].hitbox.y=30
+			dragon[0].posy=30
+			dragon[0].direccion="izquierda"
+			dragon[0].vida=20
+
+			#jefe
+			dragon[1].hitbox.x=750
+			dragon[1].posx=750
+			dragon[1].hitbox.y=300
+			dragon[1].posy=300
+			dragon[1].width=1
+			dragon[1].height=80
+
+			dragon[1].direccion="izquierda"
+			dragon[1].vida=300
+
 
 def movimiento():
 	global tiempo_colision_escaleras,salto,tiempo_salto
@@ -572,6 +748,8 @@ def movimiento():
 				salto=True
 
 		if salto==True:
+			#salto_sonido = mixer.Sound("sonidos/salto.wav")
+			#salto_sonido.play()
 			tiempo_salto+=1
 			if tiempo_salto<=6:
 				heroe_jugador.posy-=14
@@ -812,7 +990,7 @@ while True:
 		#pygame.draw.rect(screen, (240,0,0), (hitbox_techo.x,hitbox_techo.y,hitbox_techo.width,hitbox_techo.height))
 
 		if reinicio_nivel==1:
-			llave_estado=False
+			#llave_estado=False
 			#añadir futuras actualizaciones para el reinicio
 			for x in lizard:
 				x.posiciones()
@@ -821,7 +999,10 @@ while True:
 			for x in dragon:
 				x.posiciones()
 				x.dragon_hechizo.clear()
-
+			heroe_jugador.hechizo_lanzado=False
+			heroe_jugador.tiempo_hechizo=0
+			heroe_jugador.hitbox_hechizo.x=0
+			heroe_jugador.hitbox_hechizo.y=0
 			daño_recibido=False 
 			if nivel==0:
 				heroe_jugador.posx=780
@@ -967,14 +1148,55 @@ while True:
 					heroe_jugador.posy=25
 					llave_estado=False
 					nivel=3
+					for x in dragon:
+						x.dragon_hechizo.clear()
+					dragon=[propiedades(670,30,80,40,20),propiedades(670,260,80,40,20)]
+     
 					cargar_nivel(nivel)
+					reinicio_nivel=1
 			if heroe_jugador.hitbox.colliderect(llave.hitbox)==True:
 				llave_estado=True
 
 		elif nivel==3:
-			
-			puerta.hitbox=pygame.Rect(840,15, 65, 65)
-			#screen.blit(pygame.image.load("imagenes/puerta1.png"),(puerta.hitbox.x,puerta.hitbox.y))
+			dragon[0].animar_dragon()
+			dragon[0].hechizo(2)
+			dragon[1].animar_dragon_jefe()
+			dragon[1].hechizo(3)
+			for x in lizard:
+				x.animar_lizard()
+			lizard[0].patrullar_lizard(680,790)
+			lizard[1].patrullar_lizard(810,890)
+
+			llave.hitbox=pygame.Rect(890, 175, 21, 15)
+			puerta.hitbox=pygame.Rect(90,235, 65, 65)
+
+			if llave_estado==False:
+				screen.blit(pygame.image.load("imagenes/objetos/llave.png"),(llave.hitbox.x,llave.hitbox.y))
+				screen.blit(pygame.image.load("imagenes/objetos/puerta1.png"),(puerta.hitbox.x,puerta.hitbox.y))
+				if hitbox_derecha.colliderect(puerta.hitbox)==True:
+					heroe_jugador.posx-=5
+				elif hitbox_izquierda.colliderect(puerta.hitbox)==True:
+					heroe_jugador.posx+=5
+			else:
+				screen.blit(pygame.image.load("imagenes/objetos/puerta2.png"),(puerta.hitbox.x,puerta.hitbox.y))
+				if heroe_jugador.hitbox.colliderect(puerta.hitbox)==True and habilidad_desbloqueada==False:
+					#nivel=4
+					habilidad_desbloqueada=True
+					t0=0
+     
+				if habilidad_desbloqueada:
+					t0+=1
+					if t0<=40:
+						blit_texto(screen, "Nuevo poder desbloqueado", (275, 205),(640,300), fuente)
+					elif t0<100:
+						blit_texto(screen, "Utiliza la tecla espacio para lanzarlo", (275, 205),(640,300), fuente)
+					else:
+						blit_texto(screen, "", (275, 205),(640,300), fuente)
+					
+
+			if heroe_jugador.hitbox.colliderect(llave.hitbox)==True:
+				llave_estado=True
+
 
 
 
@@ -1030,6 +1252,18 @@ while True:
 			heroe_jugador.num_animacion=19
 			pos = pygame.mouse.get_pos()
 			daño_recibido=False
+			habilidad_desbloqueada=False
+
+			if event.type==pygame.MOUSEBUTTONDOWN:
+				if jugar_nuevamente.click(pos):
+					reinicio_nivel=1
+					llave_estado=False
+					heroe_jugador.vida=3
+					lista_vidas=[1,1,1]
+					refresh=1
+					reinicio_juego=0
+
+			"""
 			#reinicio_nivel=1
 			if event.type==pygame.MOUSEBUTTONDOWN:
 				if jugar_nuevamente.click(pos):
@@ -1042,6 +1276,7 @@ while True:
 					lista_vidas=[1,1,1]
 					refresh=1
 					reinicio_juego=0
+			"""
 		
 
 		if heroe_jugador.vida>0:

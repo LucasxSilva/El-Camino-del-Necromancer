@@ -169,7 +169,7 @@ nivel3 = [
 "N                     EE                    EE  MMMMMMMMMMPPMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN",
 "N                                           EE    MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMN",
 "N       N                                                               MMMMMMMMMMPPPPMMMMMMMN",
-"N       NPP                                                                      MMMMMMMMMMMMN",
+"N       N                                                                        MMMMMMMMMMMMN",
 "N       NPPPPPMEEPP      PPPEE                                                               N",
 "N       NPPPPP EEP          EE                                                               N",
 "N              EEP          EE                                                               N",
