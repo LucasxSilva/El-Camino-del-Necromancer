@@ -13,7 +13,7 @@ pygame.display.set_caption("Juego de Plataformas")
 
 clock = pygame.time.Clock()
 
-modo="admin"
+modo=""
 #admin
 habilidad_desbloqueada=False
 habilidad_mejorada=pygame.transform.scale(pygame.image.load("imagenes/jugador/ataqued.png"),(100,100))
