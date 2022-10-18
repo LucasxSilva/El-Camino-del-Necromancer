@@ -77,7 +77,8 @@ class propiedades:
 				self.hitbox_hechizo.y=self.posy
 				self.hechizo_lanzado=True
 				self.direccion_hechizo=self.direccion
-	
+				self.hitbox_hechizo.width=24
+				self.hitbox_hechizo.height=14
 
 			#mantiene
 			if self.hechizo_lanzado==True:
@@ -497,7 +498,7 @@ class propiedades:
 				elif self.direccion=="izquierda":
 					self.hitbox.x-=random.randint(2,9)
 
-			if self.hitbox.colliderect(heroe_jugador.hitbox)==True:
+			if self.hitbox.colliderect(heroe_jugador.hitbox)==True and self.vida>=0:
 				daño_recibido=True
 
 			self.animar_lizard()
@@ -1003,7 +1004,6 @@ while True:
 			heroe_jugador.tiempo_hechizo=0
 			heroe_jugador.hitbox_hechizo.x=0
 			heroe_jugador.hitbox_hechizo.y=0
-			daño_recibido=False 
 			if nivel==0:
 				heroe_jugador.posx=780
 				heroe_jugador.posy=365
@@ -1016,6 +1016,7 @@ while True:
 			elif nivel==3:
 				heroe_jugador.posx=25
 				heroe_jugador.posy=25
+			daño_recibido=False 
 		reinicio_nivel=0
 
 
